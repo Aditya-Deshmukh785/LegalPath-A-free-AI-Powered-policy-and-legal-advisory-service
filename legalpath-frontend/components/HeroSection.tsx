@@ -1,6 +1,7 @@
 import React, { useImperativeHandle, forwardRef, useRef, useState } from 'react';
 import { Search, Scale, Bell, Clock, FileText, ChevronRight } from 'lucide-react';
 import FeatureCard from './FeatureCard';
+import PolicyScoutModal from './PolicyScoutModal';
 
 export interface HeroSectionHandle {
   highlightCard: (type: 'policy' | 'law') => void;
@@ -16,6 +17,7 @@ const HeroSection = forwardRef<HeroSectionHandle, HeroSectionProps>(({ user, onL
   const policyRef = useRef<HTMLDivElement>(null);
   const lawRef = useRef<HTMLDivElement>(null);
   const [activeHighlight, setActiveHighlight] = useState<'policy' | 'law' | null>(null);
+  const [isPolicyScoutOpen, setIsPolicyScoutOpen] = useState(false);
 
   useImperativeHandle(ref, () => ({
     highlightCard: (type) => {
@@ -58,7 +60,7 @@ const HeroSection = forwardRef<HeroSectionHandle, HeroSectionProps>(({ user, onL
               if (!user) {
                 onLoginClick();
               } else {
-                console.log("Policy Scout Clicked");
+                setIsPolicyScoutOpen(true);
               }
             }}
           />
@@ -153,6 +155,12 @@ const HeroSection = forwardRef<HeroSectionHandle, HeroSectionProps>(({ user, onL
       </div>
 
       <div className="absolute top-0 right-0 -z-10 w-3/4 h-[500px] bg-gradient-to-b from-blue-100/40 to-transparent pointer-events-none rounded-bl-[100px]" />
+
+      {/* Policy Scout Modal */}
+      <PolicyScoutModal
+        isOpen={isPolicyScoutOpen}
+        onClose={() => setIsPolicyScoutOpen(false)}
+      />
     </main>
   );
 });
